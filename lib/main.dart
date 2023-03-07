@@ -32,13 +32,15 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   int _counter = 0;
   // late AnimationController controller; //don't need controller here
-  final ValueNotifier<bool> isForwarding = ValueNotifier(true);
-  // bool isForward = true;  //only thing we need, not controller
+  // final ValueNotifier<bool> isForwarding = ValueNotifier(true);
+  bool isForwarding = true; //only thing we need, not controller
 
-  @override void initState() {
+  @override
+  void initState() {
     super.initState();
   }
 
@@ -56,13 +58,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   void _revertAnimation() {
     setState(() {
-        if (isForwarding.value) {
-          // controller.reverse();
-          isForwarding.value = false;
-        } else {
-          // controller.forward();
-          isForwarding.value = true;
-        }
+      if (isForwarding) {
+        // controller.reverse();
+        isForwarding = false;
+      } else {
+        // controller.forward();
+        isForwarding = true;
+      }
     });
   }
 
@@ -76,7 +78,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            LogoApp(isForwarding: isForwarding,), //should accept lost of parameters in telling us what it can handle and we can handle it internally
+            LogoApp(
+              isForwarding: isForwarding,
+            ), //should accept lost of parameters in telling us what it can handle and we can handle it internally
             //logoApp should be testable
             //how thinking is implimentive-whatever logoapp does to achieve what we ask of it - bottom level
             //what thinking - declarative - what we want logoapp to do - top level
@@ -100,17 +104,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 tooltip: 'Increment',
                 child: const Icon(Icons.edit),
               ),
-              const SizedBox(width: 4,),
+              const SizedBox(
+                width: 4,
+              ),
               FloatingActionButton(
                 onPressed: _incrementCounter,
                 tooltip: 'Increment',
                 child: const Icon(Icons.add),
               ),
-              const SizedBox(width: 4,),
+              const SizedBox(
+                width: 4,
+              ),
               FloatingActionButton(
                 onPressed: _decrementCounter,
                 tooltip: 'Decrement',
-                child: const Icon(Icons.delete,),
+                child: const Icon(
+                  Icons.delete,
+                ),
               ),
             ],
           ),
