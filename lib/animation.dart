@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LogoApp extends StatefulWidget {
-  final ValueNotifier<bool> isForwarding;
+  final bool isForwarding;
 
   const LogoApp({Key? key, required this.isForwarding}) : super(key: key);
 
@@ -13,6 +13,16 @@ class _LogoAppState extends State<LogoApp> with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
   // bool isForward = true;
+
+  late ValueNotifier<bool> isForwarding;
+
+  @override
+  void didUpdateWidget(covariant LogoApp oldWidget) {
+    if (oldWidget.isForwarding != widget.isForwarding) {
+      isForwarding.value = widget.isForwarding;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   void initState() {
@@ -32,14 +42,16 @@ class _LogoAppState extends State<LogoApp> with SingleTickerProviderStateMixin {
         // #docregion addListener
       });
     // #enddocregion addListener
-   controller.forward();
-   widget.isForwarding.addListener(() {
-     if (widget.isForwarding.value) {
-       controller.forward();
-     } else {
-       controller.reverse();
-     }
-   });
+    controller.forward();
+
+    isForwarding = ValueNotifier(widget.isForwarding);
+    isForwarding.addListener(() {
+      if (isForwarding.value) {
+        controller.forward();
+      } else {
+        controller.reverse();
+      }
+    });
   }
 
   @override
