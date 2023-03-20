@@ -1,0 +1,19 @@
+name: E2e Test
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.3.7'
+          channel: 'stable'
+      - run: dart pub global activate patrol_cli 0.7.9
+      - uses: futureware-tech/simulator-action@v2
+        with:
+          model: 'iPhone 14'
+      - run: patrol drive --target=integration_test/example_test.dart
+
