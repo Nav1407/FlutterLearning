@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:testing/animation.dart';
 
+import 'animated_gradient_button.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -78,6 +80,11 @@ class _MyHomePageState extends State<MyHomePage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const SizedBox(
+              height: 50,
+              child: AnimatedGradientButton(width: 280, height: 50),
+            ),
+
             LogoApp(
               isForwarding: isForwarding,
             ), //should accept lost of parameters in telling us what it can handle and we can handle it internally
