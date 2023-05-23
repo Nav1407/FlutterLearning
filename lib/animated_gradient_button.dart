@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class AnimatedGradientButton extends StatefulWidget {
@@ -9,14 +7,14 @@ class AnimatedGradientButton extends StatefulWidget {
   final double borderWidth;
   final Color backgroundColor;
 
-  const AnimatedGradientButton(
-      {Key? key,
-        this.backgroundColor = Colors.white,
-        this.borderRadius = const BorderRadius.all(Radius.circular(6)),
-        this.width = 400,
-        this.height = 64,
-        this.borderWidth = 3,})
-      : super(key: key);
+  const AnimatedGradientButton({
+    Key? key,
+    this.backgroundColor = Colors.white,
+    this.borderRadius = const BorderRadius.all(Radius.circular(6)),
+    this.width = 352,
+    this.height = 80,
+    this.borderWidth = 3,
+  }) : super(key: key);
 
   @override
   State<AnimatedGradientButton> createState() => _AnimatedGradientButtonState();
@@ -27,20 +25,12 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
   late Animation<double> _animation;
   late AnimationController _controller;
 
+  late AnimationController _textShineController;
+  late Animation<Color?> _textShineAnimationOne;
+  late Animation<Color?> _textShineAnimationTwo;
+
   late Animation<double> _backgroundAnimation;
   late AnimationController _backgroundController;
-
-
-  // final Map<double, Color> stops = {
-  //   0.0: const Color.fromRGBO(39, 39, 39, 1),
-  //   0.24: const Color.fromRGBO(39, 39, 39, 1),
-  //   0.34: const Color.fromRGBO(255, 0, 153, 1),
-  //   0.54: const Color.fromRGBO(97, 0, 255, 1),
-  //   0.64: const Color.fromRGBO(255, 0, 153, 1),
-  //   0.74: const Color.fromRGBO(39, 39, 39, 1),
-  //   0.84: const Color.fromRGBO(39, 39, 39, 1),
-  //   1.0: const Color.fromRGBO(39, 39, 39, 1),
-  // };
 
   static const Color mustard = Color.fromRGBO(255, 180, 4, 1);
   static const Color yellow = Color.fromRGBO(255, 223, 128, 1);
@@ -51,17 +41,11 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
   final Map<double, Color> stops = {
     0.0: mustard,
     0.06: mustard,
-    0.17: mustard,
-    0.20: orange,
-    0.22: orange,
     0.24: orange,
-    0.30: orange,
-    0.32: orange,
-    0.35: pink,
-    0.36: pink,
-    0.38: pink,
-    0.44: lightpink,
-    0.49: yellow,
+    0.27: orange,
+    0.31: orange,
+    0.37: pink,
+    0.45: lightpink,
     0.54: yellow,
     0.57: yellow,
     0.55: yellow,
@@ -90,28 +74,13 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
 
   @override
   void initState() {
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 10));
-    _backgroundController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 7000));
     super.initState();
-    _animation = Tween<double>(begin: 0 * widget.width, end: 1)
-        .animate(_controller)
-      ..addListener(() {
-        setState(() {
-        });
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _controller.repeat();
-        }
-      });
-    _controller.forward();
+    _backgroundController = AnimationController(
+        vsync: this, duration: const Duration(seconds: 7000));
     _backgroundAnimation = Tween<double>(begin: -6 * widget.width, end: 0)
         .animate(_backgroundController)
       ..addListener(() {
-        setState(() {
-        });
+        setState(() {});
       })
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -119,18 +88,54 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
         }
       });
     _backgroundController.forward();
+
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 5));
+    super.initState();
+    _animation =
+        Tween<double>(begin: -4 * widget.width, end: 0).animate(_controller)
+          ..addListener(() {
+            setState(() {});
+          })
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _controller.repeat();
+            }
+          });
+    _controller.forward();
+
+    _textShineController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1400));
+    _textShineAnimationOne = ColorTween(
+            begin: const Color.fromRGBO(39, 39, 39, 1),
+            end: const Color.fromRGBO(255, 255, 255, 1))
+        .animate(_textShineController);
+    _textShineAnimationTwo = ColorTween(
+      begin: const Color.fromRGBO(255, 255, 255, 1),
+      end: const Color.fromRGBO(39, 39, 39, 1),
+    ).animate(_textShineController);
+    _textShineController.forward();
+    _textShineController.addListener(() {
+      if (_textShineController.status == AnimationStatus.completed) {
+        _textShineController.reverse();
+      } else if (_textShineController.status == AnimationStatus.dismissed) {
+        _textShineController.forward();
+      }
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-      DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: widget.borderRadius,
+    return Stack(
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: widget.borderRadius,
             boxShadow: [
               _CustomShadow(
                 blurRadius: 5.0,
-                spreadRadius: 0.5,
+                spreadRadius: 2.0,
                 //add transparent gradient
                 gradient: LinearGradient(
                   colors: stops1.values.toList(),
@@ -140,108 +145,133 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
                 ),
               ),
             ],
-        ),
-        child: ClipRRect(
-          borderRadius: widget.borderRadius,
-          child: SizedBox(
-            height:widget.height + 4,
-            width: widget.width + 4,
-            child: Container(
-              color: const Color.fromRGBO(0, 0, 0, 0.45),
-                child: Stack(
-            children: [
-              Positioned(
-                left: - (widget.height / 2),
-                top:  - (widget.width / 2),
-                child: SizedBox(
-                  height: widget.width + widget.height,
-                  width: widget.width + widget.height,
-                  child: RotationTransition(
-                    turns: _backgroundAnimation,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: stops1.values.toList(),
-                            stops: stops1.keys.toList(),
-                            begin: const Alignment(-1.8, -2),
-                            end: const Alignment(2, 2),
-                          ),
-                      ),
-                    ),
-                  ),
-                ),
-                ),
-              Positioned(
-                top: 1,
-                left: _animation.value + 1,
-                bottom: 1,
-                right: 1,
-                child: SizedBox(
-                  width: widget.width * 6,
-                  height: widget.height - 3,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: Container(
-                      height: widget.height - 4,
-                      width: widget.width - 4,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: stops.values.toList(),
-                            stops: stops.keys.toList(),
-                            begin: const Alignment(-1.0, -2),
-                            end: const Alignment(1.0, 2),
-                          )),
-                    ),
+          ),
+          child: ClipRRect(
+            borderRadius: widget.borderRadius,
+            child: SizedBox(
+              height: widget.height,
+              width: widget.width,
+              child: Container(
+                color: const Color.fromRGBO(0, 0, 0, 0.45),
+                child: Positioned(
+                  left: -(widget.height / 2),
+                  top: -(widget.width / 2),
+                  child: SizedBox(
+                    height: widget.width + widget.height,
+                    width: widget.width + widget.height,
+                    // child: RotationTransition(
+                    //   turns: _backgroundAnimation,
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       gradient: LinearGradient(
+                    //         colors: stops1.values.toList(),
+                    //         stops: stops1.keys.toList(),
+                    //         begin: const Alignment(-1.8, -2),
+                    //         end: const Alignment(2, 2),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 ),
               ),
-              // Positioned(
-              //   left: _animation.value,
-              //   top: 0,
-              //   child: SizedBox(
-              //     width: widget.width * 4,
-              //     height: widget.height,
-              //     child: Container(
-              //       decoration: BoxDecoration(
-              //           gradient: LinearGradient(
-              //             colors: stopsWhite.values.toList(),
-              //             stops: stopsWhite.keys.toList(),
-              //             begin: const Alignment(-1.0, -2),
-              //             end: const Alignment(1.0, 2),
-              //           )),
-              //     ),
-              //   ),
-              // ),
-              // ShaderMask(
-              //   shaderCallback: (rect) => const LinearGradient(
-              //       colors: [Colors.white],
-              //       stops: [0.0]).createShader(rect),
-              //   blendMode: BlendMode.srcOut,
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       borderRadius: widget.borderRadius,
-              //       border: Border.all(
-              //         width: widget.borderWidth,
-              //       ),
-              //     ),
-              //     child: Center(
-              //       child: Text(
-              //         'BUY SNEAKER IRL',
-              //         style: TextStyle(
-              //           fontSize: 18,
-              //           fontWeight: FontWeight.w700,
-              //           color: widget.backgroundColor,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
-                ),
             ),
           ),
         ),
-      );
+        SizedBox(
+        height: widget.height,
+        width: widget.width,
+        child: ClipRRect(
+          borderRadius: widget.borderRadius,
+          child: Stack(
+            children: [
+              Positioned(
+                left: _animation.value,
+                top: 0,
+                child: SizedBox(
+                  width: widget.width * 8,
+                  height: widget.height,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                      colors: stops1.values.toList(),
+                      stops: stops1.keys.toList(),
+                      begin: const Alignment(-1.0, -2),
+                      end: const Alignment(1.0, 2),
+                    )),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: _animation.value,
+                top: 0,
+                child: SizedBox(
+                  width: widget.width * 6,
+                  height: widget.height,
+                  child: Container(
+                    height: widget.height - 4,
+                    width: widget.width - 4,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                      colors: stops.values.toList(),
+                      stops: stops.keys.toList(),
+                      begin: const Alignment(-1.0, -2),
+                      end: const Alignment(1.0, 2),
+                    )),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Icon(
+                    Icons.star,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  ShaderMask(
+                    shaderCallback: (shader) => LinearGradient(
+                      colors: [
+                        _textShineAnimationTwo.value!,
+                        _textShineAnimationTwo.value!
+                      ],
+                    ).createShader(shader),
+                    // blendMode: BlendMode.srcATop,
+                    blendMode: BlendMode.srcATop,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          'STEP UP YOUR GAME',
+                          style: TextStyle(
+                            fontSize: 20,
+                            // fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        Text('UPGRADE TO ELITE',
+                          style: TextStyle(
+                            fontSize: 14,
+                            // fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+    );
   }
 }
 
@@ -250,14 +280,14 @@ class _CustomShadow extends BoxShadow {
 
   const _CustomShadow(
       {required this.gradient,
-        Offset offset = Offset.zero,
-        double blurRadius = 0.0,
-        spreadRadius = 0.0})
+      Offset offset = Offset.zero,
+      double blurRadius = 0.0,
+      spreadRadius = 0.0})
       : super(
-      color: Colors.black,
-      offset: offset,
-      blurRadius: blurRadius,
-      spreadRadius: spreadRadius);
+            color: Colors.black,
+            offset: offset,
+            blurRadius: blurRadius,
+            spreadRadius: spreadRadius);
 
   @override
   Paint toPaint() {

@@ -168,3 +168,57 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 }
+
+
+// DecoratedBox(
+// decoration: BoxDecoration(
+// borderRadius: widget.borderRadius,
+// boxShadow: [
+// _CustomShadow(
+// blurRadius: 5.0,
+// spreadRadius: 0.5,
+// gradient: LinearGradient(
+// colors: stops1.values.toList(),
+// stops: stops1.keys.toList(),
+// begin: const Alignment(-1.8, -2),
+// end: const Alignment(2, 2),
+// ),
+// ),
+// ],
+// ),
+// child: ClipRRect(
+// borderRadius: widget.borderRadius,
+// child: SizedBox(
+// height:widget.height + 4,
+// width: widget.width + 4,
+// child: Container(
+// color: const Color.fromRGBO(0, 0, 0, 0.45),
+// child: Stack(
+// children: [
+// Positioned(
+// left: - (widget.height / 2),
+// top:  - (widget.width / 2),
+// child: SizedBox(
+// height: widget.width + widget.height,
+// width: widget.width + widget.height,
+// child: RotationTransition(
+// turns: _backgroundAnimation,
+// child: Container(
+// decoration: BoxDecoration(
+// gradient: LinearGradient(
+// colors: stops1.values.toList(),
+// stops: stops1.keys.toList(),
+// begin: const Alignment(-1.8, -2),
+// end: const Alignment(2, 2),
+// ),
+// ),
+// ),
+// ),
+// ),
+// ),
+// ],
+// ),
+// ),
+// ),
+// ),
+// ),
