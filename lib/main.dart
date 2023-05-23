@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:testing/animation.dart';
 
+import 'animated_gradient_button.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//implementive way vs declarative way, Implementive is what we have have done here with putting controller in main(changes UI state)
+//implementive way vs declarative way, Implenentive is what we have have done here with putting controller in main(changes UI state)
 //Declarative way is not only building initial UI but UI at any time => define state that can generate state at any time, then we only need to change state, flutter will handle UI
 
 class MyHomePage extends StatefulWidget {
@@ -35,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   int _counter = 0;
+
   // late AnimationController controller; //don't need controller here
   // final ValueNotifier<bool> isForwarding = ValueNotifier(true);
   bool isForwarding = true; //only thing we need, not controller
@@ -68,6 +71,29 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
+  //agletSheet(widget, positionenum), this enum can be middle, top, full - should be draggable
+
+  void _showSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 3,
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                'Sheet',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,9 +104,14 @@ class _MyHomePageState extends State<MyHomePage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const SizedBox(
+              height: 50,
+              child: AnimatedGradientButton(width: 280, height: 50),
+            ),
             LogoApp(
               isForwarding: isForwarding,
-            ), //should accept lost of parameters in telling us what it can handle and we can handle it internally
+            ),
+            //should accept lost of parameters in telling us what it can handle and we can handle it internally
             //logoApp should be testable
             //how thinking is implimentive-whatever logoapp does to achieve what we ask of it - bottom level
             //what thinking - declarative - what we want logoapp to do - top level
@@ -100,9 +131,17 @@ class _MyHomePageState extends State<MyHomePage>
           Row(
             children: [
               FloatingActionButton(
+                onPressed: _showSheet,
+                tooltip: 'Sheet',
+                child: const Icon(Icons.upload_outlined),
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              FloatingActionButton(
                 onPressed: _revertAnimation,
-                tooltip: 'Increment',
-                child: const Icon(Icons.edit),
+                tooltip: 'Animation',
+                child: const Icon(Icons.animation),
               ),
               const SizedBox(
                 width: 4,

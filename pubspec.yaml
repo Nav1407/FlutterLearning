@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -27,6 +27,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  mapbox_maps_flutter: ^0.4.1
+  sheet: ^0.0.4+1
+  webview_flutter: 2.8.0
+  webview_flutter_android:
+  webview_flutter_platform_interface:
+  webview_flutter_wkwebview:
+  path_provider:
   flutter:
     sdk: flutter
 
@@ -36,9 +43,14 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
-  test:
+  build_runner:
+  flutter_driver:
+    sdk: flutter
   flutter_test:
     sdk: flutter
+  mockito:
+  plugin_platform_interface:
+  test:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -52,6 +64,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: webview_flutter_android
+      ios:
+        default_package: webview_flutter_wkwebview
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
