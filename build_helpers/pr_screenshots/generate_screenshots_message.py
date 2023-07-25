@@ -78,12 +78,13 @@ def upload_screenshots(
 
 def generate_message(image_urls: List[Tuple[str, Optional[str]]]):
     print("Generating message")
-    message = "## Screenshots"
+    message = "<details><summary>Screenshots</summary>"
     for name, image_url in image_urls:
         if image_url is None:
             continue
-        message += f"\n\n### {name}"
-        message += f"\n![{name}]({image_url})"
+        # message += f"\n\n### {name}"
+        message += f"![{name}]({image_url})"
+    message += f"</details>"
     with open(MESSAGE_FILENAME, "w") as file:
         file.write(message)
 
