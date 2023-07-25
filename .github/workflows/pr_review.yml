@@ -48,7 +48,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ env.PR_NUMBER }}
-          body-path: ci_screenshots_message.md
+          body-file: ci_screenshots_message.md
 #          body: |-
 #            ## Build Preview
 #

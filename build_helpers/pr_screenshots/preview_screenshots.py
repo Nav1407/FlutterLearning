@@ -37,7 +37,6 @@ def capture_screenshots(urls: List[Tuple[str, str]]) -> List[Tuple[str, str, str
                 ).replace(" ", "")
             )
             screenshots.append((name, filename, image))
-            print("Screenshots: ", screenshots)
         except subprocess.CalledProcessError as e:
             print(f"Error: {e}")
     return screenshots
