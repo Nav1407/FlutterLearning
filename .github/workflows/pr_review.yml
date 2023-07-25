@@ -10,6 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  pull-requests: write
   contents: write
   actions: read
   checks: write
@@ -27,10 +28,37 @@ jobs:
       - name: test
         run: |
           echo hello
-      - name: Upload images
-        uses: edunad/actions-image@v2.0.0
-        with:
-          path: './*.png'
+      - name: Upload screenshots and generate message
+        id: upload_screenshots
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          title: 'Tests preview'
-          annotationLevel: 'preview'
+        run: |
+          python ./build_helpers/pr_screenshots/build_widget_test_preview.py test/widget/goldens
+          npm install --global capture-website-cli
+          python ./build_helpers/pr_screenshots/preview_screenshots.py
+          python ./build_helpers/pr_screenshots/generate_screenshots_message.py $GITHUB_TOKEN
+          cat ci_screenshots_message.md 
+
+      - name: Update Comment
+        env:
+          JOB_PATH: "${{ github.server_url }}/${{ github.repository }}/actions/\
+              runs/${{ env.PREVIOUS_JOB_ID }}"
+          HEAD_SHA: ${{ env.HEAD_SHA }}
+
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body-path: ci_screenshots_message.md
+#          body: |-
+#            ## Build Preview
+#
+#            [![badge]]($JOB_PATH)
+#
+#            You can find files attached to the below linked Workflow Run URL (Logs).
+#
+#            Please note that files only stay for around 90 days!
+#            | Name      | Link
+#            --------------------------------------------------------------------
+#            | Commit    | ${{ env.HEAD_SHA }}
+#            | Logs      | ${{ env.JOB_PATH }}
+#            | Jar Files | ${{ env.ARTIFACT_URL }}
