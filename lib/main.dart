@@ -78,9 +78,9 @@ class _MyHomePageState extends State<MyHomePage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            LogoApp(
-              isForwarding: isForwarding,
-            ), //should accept lost of parameters in telling us what it can handle and we can handle it internally
+            // LogoApp(
+            //   isForwarding: isForwarding,
+            // ), //should accept lost of parameters in telling us what it can handle and we can handle it internally
             //logoApp should be testable
             //how thinking is implimentive-whatever logoapp does to achieve what we ask of it - bottom level
             //what thinking - declarative - what we want logoapp to do - top level
@@ -99,29 +99,29 @@ class _MyHomePageState extends State<MyHomePage>
         children: [
           Row(
             children: [
-              FloatingActionButton(
-                onPressed: _revertAnimation,
-                tooltip: 'Increment',
-                child: const Icon(Icons.edit),
-              ),
-              const SizedBox(
-                width: 4,
-              ),
+              // FloatingActionButton(
+              //   onPressed: _revertAnimation,
+              //   tooltip: 'Increment',
+              //   child: const Icon(Icons.edit),
+              // ),
+              // const SizedBox(
+              //   width: 4,
+              // ),
               FloatingActionButton(
                 onPressed: _incrementCounter,
                 tooltip: 'Increment',
                 child: const Icon(Icons.add),
               ),
-              const SizedBox(
-                width: 4,
-              ),
-              FloatingActionButton(
-                onPressed: _decrementCounter,
-                tooltip: 'Decrement',
-                child: const Icon(
-                  Icons.delete,
-                ),
-              ),
+              // const SizedBox(
+              //   width: 4,
+              // ),
+              // FloatingActionButton(
+              //   onPressed: _decrementCounter,
+              //   tooltip: 'Decrement',
+              //   child: const Icon(
+              //     Icons.delete,
+              //   ),
+              // ),
             ],
           ),
         ],
