@@ -33,4 +33,3 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: |
             vision-pro.png
-            *.png
