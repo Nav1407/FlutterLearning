@@ -38,6 +38,15 @@ jobs:
           python ./build_helpers/pr_screenshots/preview_screenshots.py
           python ./build_helpers/pr_screenshots/generate_screenshots_message.py $GITHUB_TOKEN
           cat ci_screenshots_message.md 
+          echo "PR_MESSAGE=$(cat ci_screenshots_message.md)" >> "$GITHUB_ENV"
+
+      - name: Comment screenshots message on PR
+        uses: phulsechinmay/rewritable-pr-comment@v0.3.0
+        with:
+          message: ${{ env.PR_MESSAGE }}
+          GITHUB_TOKEN: ${{ github.event.pull_request.number }}
+          COMMENT_IDENTIFIER: "flutter-widget-test-preview"
+          ISSUE_ID: ${{ github.event.pull_request.number }}
 
       - name: Update Comment
         env:
