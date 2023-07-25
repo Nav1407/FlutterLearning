@@ -38,18 +38,28 @@ jobs:
           python ./build_helpers/pr_screenshots/preview_screenshots.py
           python ./build_helpers/pr_screenshots/generate_screenshots_message.py $GITHUB_TOKEN
           cat ci_screenshots_message.md
-          MESSAGE=$(cat ci_screenshots_message.md)
-          echo "PR_MESSAGE=$MESSAGE" >> "$GITHUB_ENV"
+#          MESSAGE=$(cat ci_screenshots_message.md)
+#          echo "PR_MESSAGE=$MESSAGE" >> "$GITHUB_ENV"
 
-      - uses: actions/upload-artifact@v3
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
         with:
-          name: preview
-          path: flying_piglet.png
-
-      - name: Comment screenshots message on PR
-        uses: phulsechinmay/rewritable-pr-comment@v0.3.0
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Screenshots Preview
+      - name: Update Comment
+        uses: peter-evans/create-or-update-comment@v2
         with:
-          message: ${{ env.PR_MESSAGE }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_IDENTIFIER: "flutter-widget-test-preview"
-          ISSUE_ID: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-file: ci_screenshots_message.md
+          edit-mode: replace
+#
+#      - name: Comment screenshots message on PR
+#        uses: phulsechinmay/rewritable-pr-comment@v0.3.0
+#        with:
+#          message: ${{ env.PR_MESSAGE }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          COMMENT_IDENTIFIER: "flutter-widget-test-preview"
+#          ISSUE_ID: ${{ github.event.pull_request.number }}
