@@ -29,11 +29,10 @@ jobs:
       - name: flutter test
         run: |
           echo hello
-      - name: Pull request artifacts
-        uses: gavv/pull-request-artifacts@v1.0.0
+      - name: Upload images
+        uses: edunad/actions-image@v2.0.0
         with:
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts-branch: ci-artifacts
-          artifacts: |
-            vision-pro.png
+          path: './*.png'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Tests preview'
+          annotationLevel: 'preview'
