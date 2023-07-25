@@ -38,6 +38,12 @@ jobs:
           python ./build_helpers/pr_screenshots/preview_screenshots.py
           python ./build_helpers/pr_screenshots/generate_screenshots_message.py $GITHUB_TOKEN
           cat ci_screenshots_message.md
+          MESSAGE=$(cat ci_screenshots_message.md)
+          MESSAGE="${MESSAGE//'%'/'%25'}"
+          MESSAGE="${MESSAGE//$'\n'/'%0A'}"
+          MESSAGE="${MESSAGE//$'\r'/'%0D'}"
+          echo "::set-output name=message::$MESSAGE"
+          echo "PR_MESSAGE=$MESSAGE" >> $GITHUB_OUTPUT
 #          MESSAGE=$(cat ci_screenshots_message.md)
 #          echo "PR_MESSAGE=$MESSAGE" >> "$GITHUB_ENV"
 
@@ -55,11 +61,11 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body-file: ci_screenshots_message.md
           edit-mode: replace
-#
-#      - name: Comment screenshots message on PR
-#        uses: phulsechinmay/rewritable-pr-comment@v0.3.0
-#        with:
-#          message: ${{ env.PR_MESSAGE }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          COMMENT_IDENTIFIER: "flutter-widget-test-preview"
-#          ISSUE_ID: ${{ github.event.pull_request.number }}
+
+      - name: Comment screenshots message on PR
+        uses: phulsechinmay/rewritable-pr-comment@v0.3.0
+        with:
+          message: ${{ steps.upload_screenshots.output.PR_MESSAGE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_IDENTIFIER: "flutter-widget-test-preview"
+          ISSUE_ID: ${{ github.event.pull_request.number }}
