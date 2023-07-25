@@ -34,5 +34,6 @@ jobs:
         with:
           commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts-branch: ci-artifacts
           artifacts: |
             vision-pro.png
