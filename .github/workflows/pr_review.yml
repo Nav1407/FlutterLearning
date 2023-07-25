@@ -37,8 +37,18 @@ jobs:
           npm install --global capture-website-cli
           python ./build_helpers/pr_screenshots/preview_screenshots.py
           python ./build_helpers/pr_screenshots/generate_screenshots_message.py $GITHUB_TOKEN
-          cat ci_screenshots_message.md 
-          echo "PR_MESSAGE=$(cat ci_screenshots_message.md)" >> "$GITHUB_ENV"
+          cat ci_screenshots_message.md
+          MESSAGE=$(cat ci_screenshots_message.md)
+          MESSAGE="${MESSAGE//'%'/'%25'}"
+          MESSAGE="${MESSAGE//$'\n'/'%0A'}"
+          MESSAGE="${MESSAGE//$'\r'/'%0D'}"
+          echo "PR_MESSAGE=$MESSAGE" >> "$GITHUB_ENV"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: preview
+          path: |
+            *.png
 
       - name: Comment screenshots message on PR
         uses: phulsechinmay/rewritable-pr-comment@v0.3.0
