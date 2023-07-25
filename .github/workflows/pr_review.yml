@@ -22,11 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: '3.3.7'
-          channel: 'stable'
-      - name: flutter test
+      - name: test
         run: |
           echo hello
       - name: Upload images
