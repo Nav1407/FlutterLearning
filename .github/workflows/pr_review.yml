@@ -47,14 +47,13 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: preview
-          path: |
-            *.png
+          path: flying_piglet.png
 
       - name: Comment screenshots message on PR
         uses: phulsechinmay/rewritable-pr-comment@v0.3.0
         with:
           message: ${{ env.PR_MESSAGE }}
-          GITHUB_TOKEN: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_IDENTIFIER: "flutter-widget-test-preview"
           ISSUE_ID: ${{ github.event.pull_request.number }}
 
