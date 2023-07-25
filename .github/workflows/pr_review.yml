@@ -39,9 +39,6 @@ jobs:
           python ./build_helpers/pr_screenshots/generate_screenshots_message.py $GITHUB_TOKEN
           cat ci_screenshots_message.md
           MESSAGE=$(cat ci_screenshots_message.md)
-#          MESSAGE="${MESSAGE//'%'/'\%'}"
-#          MESSAGE="${MESSAGE//$'\n'/'%0A'}"
-#          MESSAGE="${MESSAGE//$'\r'/'%0D'}"
           echo "PR_MESSAGE=$MESSAGE" >> "$GITHUB_ENV"
 
       - uses: actions/upload-artifact@v3
@@ -56,27 +53,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_IDENTIFIER: "flutter-widget-test-preview"
           ISSUE_ID: ${{ github.event.pull_request.number }}
-
-#      - name: Update Comment
-#        env:
-#          JOB_PATH: "${{ github.server_url }}/${{ github.repository }}/actions/\
-#              runs/${{ env.PREVIOUS_JOB_ID }}"
-#          HEAD_SHA: ${{ github.event.pull_request.number }}
-#
-#        uses: peter-evans/create-or-update-comment@v2
-#        with:
-#          issue-number: ${{ github.event.pull_request.number }}
-#          body-file: ci_screenshots_message.md
-#          body: |-
-#            ## Build Preview
-#
-#            [![badge]]($JOB_PATH)
-#
-#            You can find files attached to the below linked Workflow Run URL (Logs).
-#
-#            Please note that files only stay for around 90 days!
-#            | Name      | Link
-#            --------------------------------------------------------------------
-#            | Commit    | ${{ env.HEAD_SHA }}
-#            | Logs      | ${{ env.JOB_PATH }}
-#            | Jar Files | ${{ env.ARTIFACT_URL }}
