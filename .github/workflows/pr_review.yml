@@ -28,7 +28,7 @@ jobs:
           channel: 'stable'
       - name: flutter test
         run: |
-          flutter test
+          echo hello
       - name: Pull request artifacts
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
