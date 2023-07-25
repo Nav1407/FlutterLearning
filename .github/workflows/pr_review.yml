@@ -43,11 +43,11 @@ jobs:
         env:
           JOB_PATH: "${{ github.server_url }}/${{ github.repository }}/actions/\
               runs/${{ env.PREVIOUS_JOB_ID }}"
-          HEAD_SHA: ${{ env.HEAD_SHA }}
+          HEAD_SHA: ${{ github.event.pull_request.number }}
 
         uses: peter-evans/create-or-update-comment@v2
         with:
-          issue-number: ${{ env.PR_NUMBER }}
+          issue-number: ${{ github.event.pull_request.number }}
           body-file: ci_screenshots_message.md
 #          body: |-
 #            ## Build Preview
