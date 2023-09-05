@@ -8,11 +8,16 @@ env:
 
 jobs:
   greeting_job:
-    runs-on: "${{ env.runner_type }}"
+    runs-on: ubuntu-latest
     env:
       Greeting: Hello
     steps:
       - name: "Say Hello Mona it's Monday"
+        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+        env:
+          First_Name: Mona
+      - name: "test step"
+        if: env.runner_type == "ubuntu-latest"
         run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
         env:
           First_Name: Mona
