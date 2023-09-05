@@ -14,7 +14,7 @@ jobs:
       Greeting: Hello
     steps:
       - name: "Say Hello Mona it's Monday"
-        run: echo "${jobs.greeting_job.runs-on} $First_Name. Today is $DAY_OF_WEEK!"
+        run: echo "${{ jobs.greeting_job.runs-on }} $First_Name. Today is $DAY_OF_WEEK!"
         env:
           First_Name: Mona
       - name: "test step"
