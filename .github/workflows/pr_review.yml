@@ -1,71 +1,18 @@
-name: Test
+name: Greeting on variable day
 
-on:
-  pull_request:
-    branches:
-      - '**'
+on: push
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  pull-requests: write
-  contents: write
-  actions: read
-  checks: write
+env:
+  DAY_OF_WEEK: Monday
+  runner_type: ubuntu-latest
 
 jobs:
-  build:
-    permissions:
-      contents: write
-      pull-requests: write
-      actions: read
-      checks: write
-    runs-on: ubuntu-latest
+  greeting_job:
+    runs-on: ${{ runner_type }}
+    env:
+      Greeting: Hello
     steps:
-      - uses: actions/checkout@v3
-      - name: test
-        run: |
-          echo hello
-      - name: Upload screenshots and generate message
-        id: upload_screenshots
+      - name: "Say Hello Mona it's Monday"
+        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python ./build_helpers/pr_screenshots/build_widget_test_preview.py test/widget/goldens
-          npm install --global capture-website-cli
-          python ./build_helpers/pr_screenshots/preview_screenshots.py
-          python ./build_helpers/pr_screenshots/generate_screenshots_message.py $GITHUB_TOKEN
-          cat ci_screenshots_message.md
-          MESSAGE=$(cat ci_screenshots_message.md)
-          MESSAGE="${MESSAGE//'%'/'%25'}"
-          MESSAGE="${MESSAGE//$'\n'/'%0A'}"
-          MESSAGE="${MESSAGE//$'\r'/'%0D'}"
-          echo "::set-output name=message::$MESSAGE"
-          echo "PR_MESSAGE=$MESSAGE" >> $GITHUB_OUTPUT
-#          MESSAGE=$(cat ci_screenshots_message.md)
-#          echo "PR_MESSAGE=$MESSAGE" >> "$GITHUB_ENV"
-
-      - name: Find Comment
-        uses: peter-evans/find-comment@v2
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Screenshots Preview
-      - name: Update Comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body-file: ci_screenshots_message.md
-          edit-mode: replace
-
-      - name: Comment screenshots message on PR
-        uses: phulsechinmay/rewritable-pr-comment@v0.3.0
-        with:
-          message: ${{ steps.upload_screenshots.output.PR_MESSAGE }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_IDENTIFIER: "flutter-widget-test-preview"
-          ISSUE_ID: ${{ github.event.pull_request.number }}
+          First_Name: Mona
