@@ -5,6 +5,7 @@ on: push
 env:
   DAY_OF_WEEK: Monday
   runner_type: ubuntu-latest
+  is_self_runner: true
 
 jobs:
   greeting_job:
@@ -17,7 +18,7 @@ jobs:
         env:
           First_Name: Mona
       - name: "test step"
-        if: env.runner_type == "ubuntu-latest"
+        if: env.is_self_runner
         run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
         env:
           First_Name: Mona
