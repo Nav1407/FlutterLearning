@@ -5,11 +5,11 @@ on: push
 env:
   DAY_OF_WEEK: Monday
   runner_type: ubuntu-latest
-  is_self_runner: true
+  is_self_runner: false
 
 jobs:
   greeting_job:
-    runs-on: ${{env.runner_type}}
+    runs-on: ubuntu-latest
     env:
       Greeting: Hello
     steps:
