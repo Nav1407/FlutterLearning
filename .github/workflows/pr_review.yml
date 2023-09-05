@@ -8,7 +8,7 @@ env:
 
 jobs:
   greeting_job:
-    runs-on: ${{ runner_type }}
+    runs-on: "${{ env.runner_type }}"
     env:
       Greeting: Hello
     steps:
